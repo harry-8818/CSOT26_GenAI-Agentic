@@ -4,27 +4,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=os.environ["OPENROUTER_API_KEY"],
-)
+client = OpenAI(base_url="https://openrouter.ai/api/v1",api_key=os.environ["OPENROUTER_API_KEY"],)
 
 def call_model(prompt: str) -> str:
-    """
-    Make a single chat completion call.
-    Print the full response object first and understand its structure.
-    Then return just the assistant's text.
-    """
+    # taking the input from user and performing the next sequence of work
     response = client.chat.completions.create(
-        model="deepseek/deepseek-v4-flash:free",
-        messages=[
-            {"role": "user", "content": prompt}
-        ],
-    )
-    # TODO: try adding a system prompt with different instructions and guidelines
-    # TODO: inspect `response` before you extract anything from it
-    # What's in response.choices? What's in response.usage?
-    pass
+        model="nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+        messages=[{"role":"system","content":"Output your answer in a single sentense and keep it short."},
+                {"role":"user","content":prompt}])
+    print("Response Object")
+    print(response)
+    return response.choices[0].message.content
 
 if __name__ == "__main__":
-    print(call_model("What is the capital of Australia?"))
+    response = call_model("Who is Virat Kohli and what is his role in RCB over the past few years?")
+    print(response)
