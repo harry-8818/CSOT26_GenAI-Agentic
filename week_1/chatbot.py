@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 class ChatAgent:
-    def __init__(self,model,system_prompt,max_calls = 2):
+    def __init__(self,model,system_prompt,max_calls = 8):
         self.model = model
         self.max_calls = max_calls
         self.client = OpenAI(base_url="https://openrouter.ai/api/v1",api_key=os.environ["OPENROUTER_API_KEY"],)
