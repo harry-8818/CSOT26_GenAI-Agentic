@@ -30,27 +30,25 @@ class AgentApp(App):
 
     def on_mount(self):
         chat_panel = self.query_one("#chat_panel",RichLog)
-        tool_panel = self.query_one("#tool_panel", RichLog)
+        tool_panel = self.query_one("#tool_panel",RichLog)
         chat_panel.write("[orange] Ready when YOU are [/orange]")
         chat_panel.write(f"Session ID: {self.ai_agent.session_id}\n")
         tool_panel.write("Tool Execution\n")
 
     def action_clear_chat(self) -> None:
-        """Triggered by Ctrl+L. Only clears the UI, keeps memory."""
         self.query_one("#chat_panel",RichLog).clear()
         self.query_one("#tool_panel",RichLog).clear()
         self.query_one("#chat_panel",RichLog).write(f"Session ID: {self.ai_agent.session_id}\n")
-        self.query_one("#tool_panel", RichLog).write("Tool Execution\n")
+        self.query_one("#tool_panel",RichLog).write("Tool Execution\n")
 
     def action_clear_history(self) -> None:
-        """Triggered by Ctrl+K. Wipes the UI AND the Agent's memory."""
         self.ai_agent = Agent(on_tool_event=self.handle_tool_event)
         chat_panel = self.query_one("#chat_panel",RichLog)
         tool_panel = self.query_one("#tool_panel",RichLog)
         chat_panel.clear()
         tool_panel.clear()
         self.query_one("#chat_panel",RichLog).write(f"Session ID: {self.ai_agent.session_id}\n")
-        self.query_one("#tool_panel", RichLog).write("Tool Execution\n")
+        self.query_one("#tool_panel",RichLog).write("Tool Execution\n")
 
     async def on_input_submitted(self, event: Input.Submitted):
         user_text = event.value.strip()
@@ -68,7 +66,7 @@ class AgentApp(App):
     @work(exclusive=True, thread=True)
     def process_agent_turn(self, user_text: str):
         bot_response = self.ai_agent.turn(user_text)
-        self.call_from_thread(self.display_result, bot_response)
+        self.call_from_thread(self.display_result,bot_response)
 
     def display_result(self, bot_response: str):
         chat_panel = self.query_one("#chat_panel",RichLog)
